@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avinash Dittakavi — Mechanical Design Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --accent: #4f8ef7;
+    --accent2: #7c5cfc;
+    --gold: #f5c842;
+    --text: #e8e8f0;
+    --muted: #7a7a99;
+    --border: rgba(255,255,255,0.07);
+    --glow: rgba(79,142,247,0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 80% 40%, rgba(79,142,247,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 20% 70%, rgba(124,92,252,0.10) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .hero-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.1s forwards;
+  }
+
+  .hero-label::before {
+    content: '';
+    width: 2rem;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    max-width: 900px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.25s forwards;
+  }
+
+  h1 .highlight {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    margin-top: 1.5rem;
+    font-size: 1.125rem;
+    color: var(--muted);
+    max-width: 560px;
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+
+  .hero-cta {
+    margin-top: 2.5rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.55s forwards;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .btn-primary:hover { background: #6da0ff; transform: translateY(-1px); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+
+  .hero-stats {
+    margin-top: 4rem;
+    display: flex;
+    gap: 3.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.7s forwards;
+  }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .stat-num span { color: var(--accent); }
+
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-top: 0.15rem;
+  }
+
+  /* ── SECTION LAYOUT ── */
+  section {
+    padding: 6rem 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    margin-bottom: 3.5rem;
+  }
+
+  .section-tag {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .section-tag::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    max-width: 60px;
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .about-text p {
+    color: var(--muted);
+    font-weight: 300;
+    margin-bottom: 1.25rem;
+    font-size: 1.05rem;
+  }
+
+  .about-text p strong { color: var(--text); font-weight: 500; }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .skill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.1rem 1.25rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .skill-card:hover {
+    border-color: rgba(79,142,247,0.3);
+    background: var(--surface2);
+  }
+
+  .skill-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+
+  .skill-tools {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  /* ── EXPERIENCE ── */
+  .exp-divider {
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+    margin: 4rem 0;
+  }
+
+  .exp-item {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 3rem;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+
+  .exp-item:last-child { border-bottom: none; }
+
+  .exp-meta {
+    position: sticky;
+    top: 6rem;
+    align-self: start;
+  }
+
+  .company-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.6rem 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .company-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 800;
+    font-family: 'Syne', sans-serif;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .company-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .exp-date {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .exp-location {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .exp-content h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+
+  .exp-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.65rem;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .tag-current { background: rgba(79,142,247,0.15); color: var(--accent); border: 1px solid rgba(79,142,247,0.25); }
+  .tag-past { background: rgba(255,255,255,0.05); color: var(--muted); border: 1px solid var(--border); }
+
+  .exp-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .exp-bullets li {
+    display: flex;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  .exp-bullets li::before {
+    content: '→';
+    color: var(--accent);
+    flex-shrink: 0;
+    font-size: 0.85rem;
+    margin-top: 0.1rem;
+  }
+
+  .exp-bullets li strong { color: var(--text); font-weight: 500; }
+
+  /* ── AWARD BADGE ── */
+  .award-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(245,200,66,0.1);
+    border: 1px solid rgba(245,200,66,0.3);
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+    margin-top: 1rem;
+    font-size: 0.78rem;
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  /* ── PROJECTS ── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+  }
+
+  .project-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(79,142,247,0.35);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px var(--glow);
+  }
+
+  .project-visual {
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pv-airfoil { background: linear-gradient(135deg, #0f1a2e 0%, #1a2f4a 100%); }
+  .pv-torch   { background: linear-gradient(135deg, #1a1200 0%, #2e2000 100%); }
+  .pv-windmill { background: linear-gradient(135deg, #0d2010 0%, #133020 100%); }
+  .pv-bugzi   { background: linear-gradient(135deg, #1a0d2e 0%, #2a1545 100%); }
+  .pv-cnc     { background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%); }
+  .pv-copper  { background: linear-gradient(135deg, #1a0f00 0%, #2e1800 100%); }
+
+  .project-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 70%);
+  }
+
+  .project-body { padding: 1.4rem; }
+
+  .project-cat {
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .project-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+
+  .project-desc {
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1rem;
+  }
+
+  .ptag {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── EDUCATION ── */
+  .edu-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .edu-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    transition: border-color 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .edu-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .edu-card:hover::before { transform: scaleX(1); }
+  .edu-card:hover { border-color: rgba(79,142,247,0.25); }
+
+  .edu-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  .edu-degree {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: var(--text);
+  }
+
+  .edu-school {
+    font-size: 0.82rem;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+  }
+
+  .edu-meta {
+    font-size: 0.75rem;
+    color: var(--muted);
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  /* ── CERTIFICATIONS ── */
+  .cert-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .cert-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    transition: border-color 0.2s;
+  }
+
+  .cert-item:hover { border-color: rgba(79,142,247,0.3); }
+
+  .cert-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1rem;
+  }
+
+  .cert-name {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .cert-org {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-top: 0.1rem;
+  }
+
+  /* ── CONTACT ── */
+  .contact-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact-section::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 500px;
+    height: 300px;
+    background: radial-gradient(ellipse, rgba(79,142,247,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .contact-section h2 {
+    margin-bottom: 0.75rem;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+  }
+
+  .contact-section p {
+    color: var(--muted);
+    margin-bottom: 2rem;
+    font-weight: 300;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: all 0.2s;
+    background: var(--bg);
+  }
+
+  .contact-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(79,142,247,0.05);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 2.5rem 4rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 4px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero, section { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .about-grid, .exp-item { grid-template-columns: 1fr; gap: 1.5rem; }
+    .projects-grid, .edu-grid { grid-template-columns: 1fr; }
+    .cert-list { grid-template-columns: 1fr; }
+    .hero-stats { gap: 2rem; }
+    .contact-section { padding: 2.5rem 1.5rem; }
+    .skills-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#"><span>A</span>vinash Dittakavi</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a class="btn btn-primary" href="mailto:avinashdittakavi8@gmail.com" style="padding:0.55rem 1.25rem;font-size:0.82rem;">Hire Me</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-label">Mechanical Design Engineer · Liverpool, UK</div>
+  <h1>Designing Systems<br>That <span class="highlight">Actually Work</span></h1>
+  <p class="hero-sub">MSc Mechanical Engineering Design from the University of Liverpool. 3+ years building CAD models, renewable energy systems, and production-grade engineering solutions.</p>
+  <div class="hero-cta">
+    <a class="btn btn-primary" href="#projects">View Projects</a>
+    <a class="btn btn-outline" href="#contact">Get in Touch</a>
+    <a class="btn btn-outline" href="https://www.linkedin.com/in/avinash-dittakavi-6b21a9231/" target="_blank">LinkedIn ↗</a>
+  </div>
+  <div class="hero-stats">
+    <div>
+      <div class="stat-num">3<span>+</span></div>
+      <div class="stat-label">Years Experience</div>
+    </div>
+    <div>
+      <div class="stat-num">10<span>%</span></div>
+      <div class="stat-label">Material Cost Reduction</div>
+    </div>
+    <div>
+      <div class="stat-num">6<span>+</span></div>
+      <div class="stat-label">CAD Projects</div>
+    </div>
+    <div>
+      <div class="stat-num">🏆</div>
+      <div class="stat-label">Award-Winning Team</div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header fade-in">
+    <div class="section-tag">01 — About</div>
+    <h2>Engineering meets<br>management thinking</h2>
+  </div>
+  <div class="about-grid">
+    <div class="about-text fade-in">
+      <p>I'm Avinash, a <strong>Mechanical Design Engineer</strong> currently based in Liverpool, UK. I hold an MSc in Mechanical Engineering Design with Management from the University of Liverpool and have hands-on experience across renewable energy, automotive, and manufacturing sectors.</p>
+      <p>My design philosophy is simple: <strong>understand the constraints, work within them brilliantly</strong>. Whether that's sizing heat pump systems for MCS compliance, reverse engineering a torch in PTC Creo, or reducing material costs through smarter component design — I bring analytical rigour and practical creativity to every project.</p>
+      <p>I believe technology changes fast, but <strong>the principles of good design — rooted in understanding people — remain constant</strong>.</p>
+    </div>
+    <div class="skills-grid fade-in">
+      <div class="skill-card">
+        <div class="skill-name">3D CAD Modelling</div>
+        <div class="skill-tools">SolidWorks · PTC Creo · CATIA</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Engineering Analysis</div>
+        <div class="skill-tools">FEA · Heat Loss Calcs · HyperMesh</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">HVAC & Renewables</div>
+        <div class="skill-tools">Heat Pumps · Solar PV · H2X · MCS</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Design for Manufacture</div>
+        <div class="skill-tools">DFM · GD&T · PLM · Prototyping</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Structural Integrity</div>
+        <div class="skill-tools">FEA Simulation · Material Selection</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">Documentation</div>
+        <div class="skill-tools">Technical Reports · 2D Drawings · Compliance</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" style="padding-top:0;">
+  <div class="section-header fade-in">
+    <div class="section-tag">02 — Experience</div>
+    <h2>Where I've worked</h2>
+  </div>
+
+  <!-- LMF Energy -->
+  <div class="exp-item fade-in">
+    <div class="exp-meta">
+      <div class="company-badge">
+        <div class="company-icon" style="background: linear-gradient(135deg, #1a6b3a, #2d9e58);">LMF</div>
+        <div>
+          <div class="company-name">LMF Energy Services</div>
+          <div class="exp-date">Jan 2025 – Present</div>
+        </div>
+      </div>
+      <div class="exp-location">📍 Liverpool, UK</div>
+      <div class="award-badge">🏆 National Installer & Design Team of the Year 2025</div>
+    </div>
+    <div class="exp-content">
+      <h3>Mechanical Design Engineer</h3>
+      <span class="exp-tag tag-current">Current Role</span>
+      <ul class="exp-bullets">
+        <li>Designed and delivered <strong>air source heat pump and solar PV systems</strong> compliant with MCS standards, improving system efficiency and reliability</li>
+        <li>Produced detailed <strong>2D layouts and 3D pipework models</strong> using H2X, reducing design iteration time significantly</li>
+        <li>Performed <strong>heat loss calculations</strong> to accurately size systems, enhancing energy efficiency and customer satisfaction</li>
+        <li>Optimised system layouts based on technical constraints and client requirements, <strong>improving installation feasibility</strong></li>
+        <li>Maintained comprehensive engineering documentation, ensuring <strong>full regulatory compliance</strong></li>
+        <li>Contributed to an <strong>award-winning design team</strong> recognised as National Installer & Design Team of the Year (2025)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Ashok Leyland -->
+  <div class="exp-item fade-in">
+    <div class="exp-meta">
+      <div class="company-badge">
+        <div class="company-icon" style="background: linear-gradient(135deg, #b22222, #d94444);">AL</div>
+        <div>
+          <div class="company-name">Ashok Leyland</div>
+          <div class="exp-date">Jan 2021 – Feb 2022</div>
+        </div>
+      </div>
+      <div class="exp-location">📍 Pune, India</div>
+    </div>
+    <div class="exp-content">
+      <h3>Mechanical Engineer Trainee</h3>
+      <span class="exp-tag tag-past">Automotive</span>
+      <ul class="exp-bullets">
+        <li>Developed <strong>3D CAD models and detailed 2D drawings</strong> for automotive components using SolidWorks and CATIA</li>
+        <li>Reduced material costs by approximately <strong>10% through design optimisation</strong> and material selection improvements</li>
+        <li>Supported prototype development and validation, improving product <strong>performance and manufacturability</strong></li>
+        <li>Conducted simulations and engineering analysis to identify performance improvements</li>
+        <li>Collaborated with manufacturing and suppliers to ensure <strong>design feasibility and production efficiency</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Shiv Shakti -->
+  <div class="exp-item fade-in">
+    <div class="exp-meta">
+      <div class="company-badge">
+        <div class="company-icon" style="background: linear-gradient(135deg, #7a4500, #b36200);">SS</div>
+        <div>
+          <div class="company-name">Shiv Shakti Industries</div>
+          <div class="exp-date">Jun 2019 – Dec 2020</div>
+        </div>
+      </div>
+      <div class="exp-location">📍 Hyderabad, India</div>
+    </div>
+    <div class="exp-content">
+      <h3>Production Technician & Coordinator</h3>
+      <span class="exp-tag tag-past">Manufacturing</span>
+      <ul class="exp-bullets">
+        <li>Coordinated production processes and <strong>improved workflow efficiency</strong> in plastic manufacturing operations</li>
+        <li>Supported tooling and moulding processes, <strong>reducing defects</strong> and improving product quality</li>
+        <li>Ensured compliance with manufacturing standards and quality requirements</li>
+        <li>Managed material flow and scheduling to <strong>meet production targets</strong></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" style="padding-top:0;">
+  <div class="section-header fade-in">
+    <div class="section-tag">03 — Projects</div>
+    <h2>Things I've built</h2>
+  </div>
+  <div class="projects-grid">
+
+    <div class="project-card fade-in">
+      <div class="project-visual pv-airfoil">✈️</div>
+      <div class="project-body">
+        <div class="project-cat">MSc Dissertation · Aerodynamics</div>
+        <div class="project-title">30P30N Multi-Element Airfoil</div>
+        <div class="project-desc">Designed a 4-part multi-element airfoil in PTC Creo — slat, main body, flap, and end plates — as a wind tunnel prototype to study lift, drag, and divergence instability. Moveable slat and flap for variable configuration testing.</div>
+        <div class="project-tags">
+          <span class="ptag">PTC Creo</span>
+          <span class="ptag">Aerodynamics</span>
+          <span class="ptag">Wind Tunnel</span>
+          <span class="ptag">CAD Assembly</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card fade-in">
+      <div class="project-visual pv-torch">🔦</div>
+      <div class="project-body">
+        <div class="project-cat">Reverse Engineering · Product Design</div>
+        <div class="project-title">Torch Light — Full Reverse Engineering</div>
+        <div class="project-desc">Disassembled, measured, and fully remodelled an 8-component torch in PTC Creo — body, battery holder, LED circuit, glass, front rim, bottom cap, switch. Includes a complete Bill of Materials and 2D production drawings.</div>
+        <div class="project-tags">
+          <span class="ptag">PTC Creo</span>
+          <span class="ptag">Reverse Engineering</span>
+          <span class="ptag">Assembly</span>
+          <span class="ptag">2D Drawings</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card fade-in">
+      <div class="project-visual pv-windmill">🌬️</div>
+      <div class="project-body">
+        <div class="project-cat">Renewable Energy · CAD Design</div>
+        <div class="project-title">Windmill Design & Assembly</div>
+        <div class="project-desc">Designed a full wind turbine assembly in PTC Creo, breaking the model into individual components — blades, nacelle, tower structure — and assembling them with proper constraints and motion simulation.</div>
+        <div class="project-tags">
+          <span class="ptag">PTC Creo</span>
+          <span class="ptag">Renewable Energy</span>
+          <span class="ptag">3D Assembly</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card fade-in">
+      <div class="project-visual pv-bugzi">🦽</div>
+      <div class="project-body">
+        <div class="project-cat">Group Project · Assistive Technology</div>
+        <div class="project-title">Bugzi — Children's Mobility Chair Add-ons</div>
+        <div class="project-desc">Designed add-on components for the Bugzi indoor mobility chair for children aged 1–5. Personal contribution: aluminium handle with integrated button holder and multipurpose detachable joystick mount, designed in PTC Creo with full dimensional drawings.</div>
+        <div class="project-tags">
+          <span class="ptag">PTC Creo</span>
+          <span class="ptag">Aluminium Design</span>
+          <span class="ptag">Accessibility</span>
+          <span class="ptag">Group Project</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card fade-in">
+      <div class="project-visual pv-cnc">⚙️</div>
+      <div class="project-body">
+        <div class="project-cat">Manufacturing · CNC</div>
+        <div class="project-title">CNC Machining — Ceiling Rose</div>
+        <div class="project-desc">Created precision CAD models and executed CNC manufacturing processes for a ceiling rose, ensuring dimensional accuracy throughout toolpath planning and production.</div>
+        <div class="project-tags">
+          <span class="ptag">CNC Machining</span>
+          <span class="ptag">CAD/CAM</span>
+          <span class="ptag">Dimensional Accuracy</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card fade-in">
+      <div class="project-visual pv-copper">🔬</div>
+      <div class="project-body">
+        <div class="project-cat">Materials Science</div>
+        <div class="project-title">Copper-Based Composite Development</div>
+        <div class="project-desc">Designed and tested copper-based composite materials with enhanced mechanical properties, conducting structural integrity analysis and material characterisation studies.</div>
+        <div class="project-tags">
+          <span class="ptag">Materials Science</span>
+          <span class="ptag">Composites</span>
+          <span class="ptag">Structural Integrity</span>
+          <span class="ptag">Testing</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education" style="padding-top:0;">
+  <div class="section-header fade-in">
+    <div class="section-tag">04 — Education</div>
+    <h2>Academic foundation</h2>
+  </div>
+  <div class="edu-grid">
+    <div class="edu-card fade-in">
+      <div class="edu-icon" style="background: rgba(79,142,247,0.12); color: var(--accent);">🎓</div>
+      <div class="edu-degree">MSc Mechanical Engineering Design with Management</div>
+      <div class="edu-school">University of Liverpool</div>
+      <div class="edu-meta">
+        <span>Merit</span>
+        <span>2022 – 2023</span>
+        <span>Liverpool, UK</span>
+        <span style="color:var(--accent);margin-top:0.5rem">Degree conferred July 2024</span>
+      </div>
+    </div>
+    <div class="edu-card fade-in">
+      <div class="edu-icon" style="background: rgba(124,92,252,0.12); color: var(--accent2);">🎓</div>
+      <div class="edu-degree">B.Tech Mechanical Engineering</div>
+      <div class="edu-school">Gandhi Institute of Technology and Management</div>
+      <div class="edu-meta">
+        <span>CGPA: 7.0</span>
+        <span>2015 – 2019</span>
+        <span>India</span>
+      </div>
+    </div>
+    <div class="edu-card fade-in">
+      <div class="edu-icon" style="background: rgba(245,200,66,0.12); color: var(--gold);">📜</div>
+      <div class="edu-degree">CAD/CAM Certification</div>
+      <div class="edu-school">Central Institute of Tool Design</div>
+      <div class="edu-meta">
+        <span>NSQF Level 6 — A* Grade</span>
+        <span>2021</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Certifications -->
+  <div style="margin-top:3rem;" class="fade-in">
+    <div class="section-tag" style="margin-bottom:1.5rem;">Additional Certifications</div>
+    <div class="cert-list">
+      <div class="cert-item">
+        <div class="cert-icon" style="background:rgba(255,153,0,0.1);color:#ff9900;">☁️</div>
+        <div>
+          <div class="cert-name">AI & Machine Learning</div>
+          <div class="cert-org">Amazon Web Services (AWS)</div>
+        </div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon" style="background:rgba(79,142,247,0.1);color:var(--accent);">🔍</div>
+        <div>
+          <div class="cert-name">Inspection & Quality Control</div>
+          <div class="cert-org">NPTEL</div>
+        </div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon" style="background:rgba(124,92,252,0.1);color:var(--accent2);">💡</div>
+        <div>
+          <div class="cert-name">Design Technology & Innovation</div>
+          <div class="cert-org">AICTE</div>
+        </div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon" style="background:rgba(245,200,66,0.1);color:var(--gold);">⚙️</div>
+        <div>
+          <div class="cert-name">CAD/CAM — NSQF Level 6 (A*)</div>
+          <div class="cert-org">Central Institute of Tool Design</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="padding-top:0;">
+  <div class="contact-section fade-in">
+    <div class="section-tag" style="justify-content:center;">05 — Contact</div>
+    <h2>Let's work together</h2>
+    <p>Open to new engineering opportunities in mechanical design, HVAC systems, renewable energy, and product development. Based in Liverpool, UK.</p>
+    <a class="btn btn-primary" href="mailto:avinashdittakavi8@gmail.com" style="font-size:1rem;padding:0.85rem 2rem;">Send me an email</a>
+    <div class="contact-links">
+      <a class="contact-link" href="tel:+447340149168">📞 +44 7340 149168</a>
+      <a class="contact-link" href="https://www.linkedin.com/in/avinash-dittakavi-6b21a9231/" target="_blank">💼 LinkedIn Profile</a>
+      <a class="contact-link" href="mailto:avinashdittakavi8@gmail.com">✉️ avinashdittakavi8@gmail.com</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Avinash Dittakavi — Mechanical Design Engineer · Liverpool, UK · Built with care, 2025</p>
+</footer>
+
+<script>
+  // Intersection Observer for fade-in animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Stagger children
+  document.querySelectorAll('.projects-grid, .edu-grid, .cert-list, .skills-grid').forEach(grid => {
+    [...grid.children].forEach((child, i) => {
+      child.style.transitionDelay = (i * 0.08) + 's';
+    });
+  });
+</script>
+</body>
+</html>
